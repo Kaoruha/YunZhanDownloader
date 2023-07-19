@@ -34,7 +34,7 @@ python ./main.py
 ```
 
 
-### Conver to pdf
+### Convert to pdf
 if you just want to combine jpgs into one pdf, after fetch the image.
 ``` python
 python ./combine.py
