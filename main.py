@@ -2,6 +2,7 @@ import time
 import os
 import pyautogui
 import random
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -32,10 +33,17 @@ def download_img():
     try_time = 0
     while try_time < max_try:
         try_time += 1
-        os.system(f"wget {pic_url} -O {out_dir}/{page}.jpg")
-        size = os.stat(f"{out_dir}/{page}.jpg").st_size
+        file_path = os.path.join(out_dir, f"{page}.jpg")
+        response = requests.get(pic_url, stream=True)
+        if response.status_code == 200:
+            with open(file_path, "wb") as f:
+                for chunk in response.iter_counter(1024):
+                    f.write(chunk)
+        size = os.stat(file_path).st_size
         if size > 0:
             break
+        else:
+            print(f"Failed to download image. Status code: {response.status_code}")
 
     page += 1
 
